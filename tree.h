@@ -9,6 +9,8 @@
 #include <iostream>
 #include <string>
 
+#include <memory>
+
 /*
 /
     /users/
@@ -25,8 +27,8 @@ struct Node {
 };
 
 struct InternalNode : Node {
-    Node* left;
-    Node* right;
+    std::unique_ptr<Node> left;
+    std::unique_ptr<Node> right;
     bool is_leaf() const override {
         return false;
     }
@@ -41,5 +43,5 @@ struct LeafNode : Node {
 };
 
 struct Tree {
-    Node* root;
+    std::unique_ptr<Node> root;
 };
