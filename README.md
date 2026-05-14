@@ -26,16 +26,34 @@ Root
 ```
 ### What will the tree be
 ```
-union tree{
-    struct node n;
-    struct leaf l;
-}
+struct Tree {
+    Node* root;
+};
 ```
-### what is a node
+### Node
 ```
-struct node {
-    struct node* parent;
-    struct node* left;
-    struct leaf* right;
-}
+struct Node {
+    Node* parent;
+    std::string path; // will contain entire path
+    virtual ~Node() = default;
+    virtual bool is_leaf() const = 0;
+};
+
+struct InternalNode : Node {
+    Node* left;
+    Node* right;
+    bool is_leaf() const override {
+        return false;
+    }
+};
+```
+### Leaf
+```
+struct LeafNode : Node {
+    std::string key;
+    std::string value;
+    boos is_leaf() const override {
+        return true;
+    }
+};
 ```
