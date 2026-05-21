@@ -10,19 +10,12 @@
                user/login
 ```
 ```
-Root
-├── /user (folder)
-│   └── /user/login (subfolder)
-│
-├── folder
-├── folder
-├── folder
-├── folder
-└── folder
-
-    ├── file (leafs)
-    ├── file
-    └── file
+    /
+        /users/
+        /users/ali (leaf)
+        /users/hassan (leaf)
+            /users/login/hassan (leaf)
+                /.../.../.../
 ```
 ### What will the tree be
 ```

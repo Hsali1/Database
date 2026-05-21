@@ -1,41 +1,85 @@
 #include "tree.h"
 #include <string_view>
+#include <bitset>
 
-std::unique_ptr<InternalNode> create_node(InternalNode* parent, std::string_view path){
-    auto node = std::make_unique<InternalNode>();
-    node->parent = parent;
-    node->path = path;
-    return node;
+Tree root = Node {
+        .tag = (TagRoot | TagNode),
+        .north = nullptr,
+        .west = nullptr,
+        .east = nullptr,
+        .path = "/"
+};
+
+Node* create_node(Node* parent, std::string_view path){
+    assert(parent);
+    Node* n = new Node{};
+    parent->west = n;
+    n->tag = TagNode;
+    n->north = parent;
+    n->path = path;
+    return n;
+}
+
+Leaf* find_last_linear(Node* parent){
+    assert(parent);
+    if (parent->east == nullptr) return nullptr;
+    Leaf* l = parent->east;
+    while(l->east){
+        l = l->east;
+    }
+    return l;
+}
+
+Leaf* create_leaf(Node* parent, std::string_view key, std::string_view value){
+    assert(parent);
+
+    Leaf* l, *new_leaf;
+    l = find_last(parent);
+
+    new_leaf = new Leaf{};
+    assert(new_leaf);
+
+    if (l == nullptr){
+        parent->east = new_leaf;
+        // directly connected
+    } else {
+        // l is a leaf
+        l->east = new_leaf;
+    }
+
+    // set values
+    new_leaf->tag = TagLeaf;
+    new_leaf->west = (!l) ? parent : l;
+    new_leaf->key = key;
+    new_leaf->value = value;
+
+    return new_leaf;
+
 }
 
 int main(int argc, char * argv[]){
 
-    // Create root Node
-    auto root = std::make_unique<InternalNode>();
-    root->parent = nullptr;
-    root->path = "/";
+    Node& rootNode = std::get<Node>(root);
+    // &root : 0x590d68a94160
+    std::cout << "&root : " << &root << std::endl;
+    // &n : 0x590d68a94160
+    std::cout << "&rootNode : " << &rootNode << std::endl;
+    // &n.tag : 00000011
+    std::cout << "&rootNode.tag : " << std::bitset<8>(static_cast<int>(rootNode.tag)) << std::endl;
+    // &n.path : /
+    std::cout << "&rootNode.path : " << rootNode.path << std::endl;
 
-    // Create tree
-    Tree tree;
-    tree.root = std::move(root);
-    // std::cout << tree.root.get() << std::endl;
+    // Creating node
+    Node* users = create_node(&rootNode, "/Users");
+    assert(users);
+    Node* login  = create_node(users, "/Users/login");
+    assert(login);
 
-    // Access the actual InternalNode
-    InternalNode* root_ptr =
-        static_cast<InternalNode*>(tree.root.get());
-    // Create node child
-    root_ptr->left = create_node(root_ptr, "/Users");
-    // root_ptr-> left is of type std::unique_ptr<Node>
+    std::cout << "&users : " << users << std::endl;
+    std::cout << "&login : " << login << std::endl;
 
-    // Access child as InternalNode
-    InternalNode* users_ptr = 
-        static_cast<InternalNode*>(root_ptr->left.get());
-    // Create node grandchild
-    users_ptr->left = create_node(users_ptr, "/Users/login");
-
-    std::cout << "My root is : " << tree.root->path << std::endl;
-    std::cout << "ls " << tree.root->path << " : " << users_ptr->path << std::endl;
-    std::cout << "ls " << users_ptr->path << " : " << users_ptr->left->path << std::endl;
+    delete login;
+    delete users;
 
     return 0;
 }

@@ -8,40 +8,38 @@
 #include <cerrno> 
 #include <iostream>
 #include <string>
+#include <variant>
 
-#include <memory>
+#define TagRoot         1 /* 00 01 */
+#define TagNode         2 /* 00 10 */
+#define TagLeaf         4 /* 01 00 */
 
-/*
-/
-    /users/
-        /users/login/
-            /.../.../.../
-    
-*/
+#define find_last(x)    find_last_linear(x)
+
+using Tag = unsigned char;
+
+struct Node;
+struct Leaf;
+
+// Tree can contain either Node or Leaf
+using Tree = std::variant<Node, Leaf>;
 
 struct Node {
-    Node* parent;
-    std::string path; // will contain entire path
-    virtual ~Node() = default;
-    virtual bool is_leaf() const = 0;
+    Tag tag;
+
+    Node* north; // parent unless root, then itself
+    Node* west;
+    Leaf* east; // link to the first leaf
+
+    std::string path;
 };
 
-struct InternalNode : Node {
-    std::unique_ptr<Node> left;
-    std::unique_ptr<Node> right;
-    bool is_leaf() const override {
-        return false;
-    }
-};
+struct Leaf {
+    Tag tag;
 
-struct LeafNode : Node {
+    Tree* west; // left can be node or leaf
+    Leaf* east; // right cannot have a node
+
     std::string key;
     std::string value;
-    bool is_leaf() const override {
-        return true;
-    }
-};
-
-struct Tree {
-    std::unique_ptr<Node> root;
 };
