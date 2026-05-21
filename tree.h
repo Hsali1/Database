@@ -27,9 +27,9 @@ using Tree = std::variant<Node, Leaf>;
 struct Node {
     Tag tag;
 
-    Node* north; // parent unless root, then itself
-    Node* west;
-    Leaf* east; // link to the first leaf
+    Tree* north; // parent unless root, then itself
+    Tree* west;
+    Tree* east; // link to the first leaf
 
     std::string path;
 };
@@ -38,7 +38,7 @@ struct Leaf {
     Tag tag;
 
     Tree* west; // left can be node or leaf
-    Leaf* east; // right cannot have a node
+    Tree* east; // right cannot have a node
 
     std::string key;
     std::string value;
