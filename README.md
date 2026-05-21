@@ -19,35 +19,30 @@
 ```
 ### What will the tree be
 ```
-struct Tree {
-    Node* root;
-};
+using Tree = std::variant<Node, Leaf>;
 ```
 ### Node
 ```
 struct Node {
-    Node* parent;
-    std::string path; // will contain entire path
-    virtual ~Node() = default;
-    virtual bool is_leaf() const = 0;
-};
+    Tag tag;
 
-struct InternalNode : Node {
-    Node* left;
-    Node* right;
-    bool is_leaf() const override {
-        return false;
-    }
+    Node* north; // parent unless root, then itself
+    Node* west;
+    Leaf* east; // link to the first leaf
+
+    std::string path;
 };
 ```
 ### Leaf
 ```
-struct LeafNode : Node {
+struct Leaf {
+    Tag tag;
+
+    Tree* west; // left can be node or leaf
+    Leaf* east; // right cannot have a node
+
     std::string key;
     std::string value;
-    boos is_leaf() const override {
-        return true;
-    }
 };
 ```
 
