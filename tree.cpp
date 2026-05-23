@@ -110,8 +110,21 @@ int main(int argc, char * argv[]){
     Node& users_node = std::get<Node>(*users);
     Node& login_node = std::get<Node>(*login);
 
+    // Print node information
     std::cout << "users.path : " << users_node.path << std::endl;
     std::cout << "login.path : " << login_node.path << std::endl;
+
+    // Creating Leafs
+    Tree* hassan = create_leaf(login, "Hassan", "abcd895qa1");
+    assert(hassan);
+    // Tree* leaf_2;
+
+    // Get Leaf objects
+    Leaf& hassan_leaf = std::get<Leaf>(*hassan);
+    
+    // Print leaf information
+    std::cout << "hassan_leaf.value : " << hassan_leaf.value << std::endl;
+    std::cout << "hassan_leaf.key : " << hassan_leaf.key << std::endl;
 
     delete login;
     delete users;

@@ -1,4 +1,15 @@
-# Notes:
+# Notes: IN PROGRESS
+
+current output from main:
+
+&root : 0x5abb35c79160
+&rootNode : 0x5abb35c79160
+&rootNode.tag : 00000011
+&rootNode.path : /
+users.path : /Users
+login.path : /Users/login
+hassan_leaf.value : abcd895qa1
+hassan_leaf.key : Hassan
 
 ### How will I store data
 * Binary Trees
