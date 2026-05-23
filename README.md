@@ -1,15 +1,20 @@
 # Notes: IN PROGRESS
+This database sucks
+
 
 current output from main:
-
-&root : 0x5abb35c79160
-&rootNode : 0x5abb35c79160
+```
+&root : 0x622f66ae9eb0
+&rootNode : 0x622f66ae9eb0
 &rootNode.tag : 00000011
 &rootNode.path : /
 users.path : /Users
 login.path : /Users/login
 hassan_leaf.value : abcd895qa1
 hassan_leaf.key : Hassan
+ali_leaf.value : aa0983iQkm
+ali_leaf.key : Ali
+```
 
 ### How will I store data
 * Binary Trees
