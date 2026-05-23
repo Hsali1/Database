@@ -14,11 +14,7 @@ Tree* root = new Tree{
 
 Tree* create_node(Tree* parent, std::string_view path){
     assert(parent);
-    // Node* n = new Node{};
-    // parent->west = n;
-    // n->tag = TagNode;
-    // n->north = parent;
-    // n->path = path;
+
     Tree* t = new Tree{
         Node{
             .tag   = TagNode,
@@ -36,11 +32,7 @@ Tree* create_node(Tree* parent, std::string_view path){
 
 Tree* find_last_linear(Tree* parent){
     assert(parent);
-    // if (parent->east == nullptr) return nullptr;
-    // Leaf* l = parent->east;
-    // while(l->east){
-    //     l = l->east;
-    // }
+
     Node& parent_node = std::get<Node>(*parent);
     if(parent_node.east == nullptr) return nullptr;
 
@@ -58,8 +50,6 @@ Tree* create_leaf(Tree* parent, std::string_view key, std::string_view value){
 
     Tree* l = find_last(parent);
 
-    // new_leaf = new Leaf{};
-    // assert(new_leaf);
     Tree* new_leaf_tree = new Tree{
         Leaf{
             .tag   = TagLeaf,
@@ -72,7 +62,6 @@ Tree* create_leaf(Tree* parent, std::string_view key, std::string_view value){
 
     Node& parent_node = std::get<Node>(*parent);
     if (l == nullptr){
-        // parent->east = new_leaf;
         // directly connected
         parent_node.east = new_leaf_tree;
     } else {
@@ -82,7 +71,6 @@ Tree* create_leaf(Tree* parent, std::string_view key, std::string_view value){
     }
 
     // set values
-    // new_leaf->west = (!l) ? parent : l;
     Leaf& new_leaf_object = std::get<Leaf>(*new_leaf_tree);
     new_leaf_object.west = (!l) ? parent : l;
 
@@ -110,6 +98,64 @@ void destroy_everything(Tree* current){
 
     delete current;
 }
+
+Tree* find_leaf(Tree* parent, std::string_view key){
+
+    if (!parent) return nullptr;
+
+    Tree* current;
+
+    // check if current is a Node
+    if (std::holds_alternative<Node>(*parent)){
+
+        Node& parent_node = std::get<Node>(*parent);
+
+        current = parent_node.east;
+
+        while (current){
+            Leaf& n = std::get<Leaf>(*current);
+
+            if (n.key == key) return current;
+
+            current = n.east;
+        }
+        
+        Tree* result = find_leaf(parent_node.west, key);
+
+        if(result) return result;
+
+    } else {
+        current = parent;
+        while (current){
+            Leaf& l = std::get<Leaf>(*current);
+
+            if (l.key == key) return current;
+
+            current = l.east;
+        }
+    }
+
+    return nullptr;
+}
+
+// bool delete_leaf(Tree* parent, std::string_view key){
+
+//     if (!parent) return nullptr;
+
+//     Tree* target_leaf = find_leaf(parent, key);
+//     if (!target_leaf) return False;
+
+//     // Get address of previous
+//     Leaf& target_leaf_object = std::get<Leaf>(target_leaf);
+//     target_leaf_object_previous_tree = target_leaf_object.west;
+//     target_leaf_object_next_tree = target_leaf_object.east;
+
+//     if (target_leaf_object_next_tree){
+        
+//     }
+
+
+// }
 
 int main(int argc, char * argv[]){
 
@@ -154,6 +200,26 @@ int main(int argc, char * argv[]){
 
     std::cout << "ali_leaf.value : " << ali_leaf.value << std::endl;
     std::cout << "ali_leaf.key : " << ali_leaf.key << std::endl;
+
+    // Find_leaf Function
+    Tree* find_data = find_leaf(root, "Hassan");
+    if (find_data){
+        Leaf& find_data_object = std::get<Leaf>(*find_data);
+        std::cout << "Found Leaf : " << find_data_object.key << std::endl;
+        std::cout << "Value : " << find_data_object.value << std::endl;
+    } else {
+        std::cout << "could not find Leaf" << std::endl;
+    }
+
+
+    find_data = find_leaf(root, "Fire");
+    if (find_data){
+        Leaf& find_data_object = std::get<Leaf>(*find_data);
+        std::cout << "Found Leaf : " << find_data_object.key << std::endl;
+        std::cout << "Value : " << find_data_object.value << std::endl;
+    } else {
+        std::cout << "could not find Leaf" << std::endl;
+    }
 
     destroy_everything(root);
 
