@@ -219,7 +219,6 @@ int main(int argc, char * argv[]){
     assert(users);
     Tree* login  = create_node(users, "/Users/login");
     assert(login);
-    Tree* 
 
     // Get Node objects
     Node& users_node = std::get<Node>(*users);
