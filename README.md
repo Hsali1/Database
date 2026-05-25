@@ -351,13 +351,11 @@ to support multiple child nodes.
 ## Future Improvements
 
 - Persistent file storage
-- JSON serialization
 - Interactive shell
 - Smart pointer ownership
 - Better node relationship design
 - Multi-child node support
 - Record update functionality
-- Performance benchmarking
 - Save/load database state
 
 ---
@@ -366,7 +364,7 @@ to support multiple child nodes.
 
 ```bash
 make
-./tree
+./TreeDB
 ```
 
 ---
