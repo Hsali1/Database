@@ -1,6 +1,6 @@
 CXX = g++
 CXXFLAGS =  -std=c++20 -g -Wall
-TARGET = tree
+TARGET = TreeDB
 
 # List of object files needed
 OBJS = tree.o
